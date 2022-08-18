@@ -1,4 +1,4 @@
-
+from random import shuffle
 
 
 
@@ -36,15 +36,60 @@ class Hand:
         self.cards.remove(card)
         other_hand.add(card)
 
+
+class Unprintable_card(Card):
+    def __str__(self):
+        return "<secret>"
+
+class Positionable_card(Card):
+    def __init__(self,suit,rank,face_up= True):
+        super().__init__(rank,suit)
+        self.is_face_up = face_up
+
+    def __str__(self):
+        if self.is_face_up:
+            rep = super().__str__()
+        else:
+            rep = "XX"
+        return rep
+
+    def flip(self):
+        self.is_face_up = not self.is_face_up
+
+
+class Deck(Hand):
+    def populate(self):
+        for i in Card.SUITS:
+            for j in Card.RANKS:
+                self.add(Card(j,i))
+
+    def shuffle(self):
+        shuffle(self.cards)
+
+    def deal(self, hands, per_hand=5):
+        for rounds in range(per_hand):
+            for hand in hands:
+                if self.cards:
+                    top_card = self.cards[0]
+                    self.give(top_card,hand)
+                else:
+                    print("Out of cards.")
+
 if __name__ == "__main__":
-    card1 = Card(rank="A",suit="♣")
-    card2 = Card(rank="2",suit="♣")
-    card3 = Card(rank="3",suit="♣")
-    card4 = Card(rank="4",suit="♣")
-    card5 = Card(rank="5",suit="♣")
     my_hand = Hand()
-    my_hand.add(card1)
-    my_hand.add(card2)
-    my_hand.add(card3)
-    my_hand.add(card4)
-    my_hand.add(card5)
+    your_hand =Hand()
+    hands = [my_hand,your_hand]
+    deck1 = Deck()
+    deck1.populate()
+    print(deck1)
+    deck1.shuffle()
+    print(deck1)
+    deck1.deal(hands,per_hand=5)
+    print(my_hand)
+    print(your_hand)
+    print(deck1)
+    card1 = Card("A","♦")
+    card2 = Unprintable_card("1","♦")
+    card3 = Positionable_card("5","♦")
+    card3.flip()
+    print(card1,card2,card3)
