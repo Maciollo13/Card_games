@@ -6,6 +6,7 @@ import game_lib
 class BJ_card(cards.Card):
     ACE_VALUE = 1
 
+    @property
     def value(self):
         if self.face_up:
             v = cards.Card.RANKS.index(self.rank) + 1
@@ -23,8 +24,8 @@ class BJ_deck(cards.Deck):
                 self.cards.append(BJ_card(j, i))
 
 class BJ_hand(cards.Hand):
-    def __init__(self,name):
-        super().__init__()
+    def __init__(self, name):
+        super(BJ_hand,self).__init__()
         self.name = name
 
     def __str__(self):
@@ -144,3 +145,20 @@ class BJ_game(object):
             p.clear()
 
         self.dealer.clear()
+
+def main():
+    print("Welcome to the game of Black Jack! \n")
+    names = []
+    number = game_lib.ask_number("Enter the numbers of players (1 - 7) ",low= 1,high= 8)
+
+    for i in range(number):
+        name = input("Enter the name of the player: ")
+        names.append(name)
+    print()
+    game = BJ_game(names)
+    again = None
+    while again != "n":
+        game.play()
+        again = game_lib.ask_yes_no("Do you want to continue? \n")
+if __name__ == "__main__":
+    main()
