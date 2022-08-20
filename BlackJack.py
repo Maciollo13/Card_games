@@ -52,7 +52,7 @@ class BJ_hand(cards.Hand):
             t += 10
         return t
 
-    def is_over(self):
+    def is_busted(self):
         return self.total > 21
 
 
@@ -74,3 +74,73 @@ class BJ_player(BJ_hand):
 
     def tie(self):
         print(self.name + " tied")
+
+class BJ_dealer(BJ_hand):
+    def is_drawing(self):
+        return self.total < 17
+
+    def busted(self):
+        print(self.name, "busted.")
+
+    def flip_first_card(self):
+        first_card = self.cards[0]
+        first_card.flip()
+
+class BJ_game(object):
+    def __init__(self,names):
+        self.players = []
+        for name in names:
+            player = BJ_player(name)
+            self.players.append(player)
+        self.dealer = BJ_dealer("Dealer")
+        self.deck = BJ_deck()
+        self.deck.populate()
+        self.deck.shuffle()
+
+    def still_playing(self):
+        sp = []
+        for player in self.players:
+            if not player.is_busted():
+                sp.append(player)
+        return sp
+
+    def additional_cards(self,player):
+        while not player.is_busted() and player.is_drawing:
+            self.deck.deal([player])
+            print(player)
+            if player.is_busted():
+                player.busted()
+
+    def play(self):
+        self.deck.deal(self.players + [self.dealer], per_hand= 2)
+        self.dealer.flip_first_card()
+        for p in self.players:
+            print(p)
+        print(self.dealer)
+
+        for p in self.players:
+            self.additional_cards(p)
+
+        self.dealer.flip_first_card()
+
+        if not self.still_playing():
+            print(self.dealer)
+        else:
+            print(self.dealer)
+            self.additional_cards(self.dealer)
+            if self.dealer.is_busted():
+                for p in self.still_playing():
+                    p.win()
+            else:
+                for p in self.still_playing():
+                    if p.total > self.dealer.total:
+                        p.win()
+                    elif p.total == self.dealer.total:
+                        p.tie()
+                    else:
+                        p.lose()
+
+        for p in self.players:
+            p.clear()
+
+        self.dealer.clear()
