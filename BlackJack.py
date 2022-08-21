@@ -60,7 +60,7 @@ class BJ_hand(cards.Hand):
 class BJ_player(BJ_hand):
 
     def is_hitting(self):
-        response = game_lib.ask_yes_no("\n" + self.name + " - Do you want to draw a card. (Y/N)")
+        response = game_lib.ask_yes_no("\n" + self.name + " - Do you want to draw a card. (Y/N) ")
         return response == "y"
 
     def busted(self):
@@ -160,6 +160,6 @@ def main():
     again = None
     while again != "n":
         game.play()
-        again = game_lib.ask_yes_no("Do you want to play again? \n")
+        again = game_lib.ask_yes_no("Do you want to play again? (y/n) \n")
 if __name__ == "__main__":
     main()

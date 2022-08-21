@@ -55,7 +55,7 @@ class Deck(Hand):
     def shuffle(self):
         shuffle(self.cards)
 
-    def deal(self, hands, per_hand=5):
+    def deal(self, hands, per_hand=1):
         for rounds in range(per_hand):
             for hand in hands:
                 if self.cards:
