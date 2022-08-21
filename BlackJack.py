@@ -1,5 +1,4 @@
 import cards
-import random
 import game_lib
 
 
